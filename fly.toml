@@ -1,4 +1,4 @@
-app = "shelf-webapp"
+app = "shelf-webapp-52l"
 primary_region = "iad"
 kill_signal = "SIGINT"
 kill_timeout = "5s"
