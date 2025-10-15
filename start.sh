@@ -1,7 +1,8 @@
 #!/bin/sh -ex
 
 # This file is how Fly starts the server (configured in fly.toml). 
-# Migrations are already run during the build phase in the Dockerfile
+# Run migrations before starting the server (secrets are available at runtime)
+npx prisma migrate deploy --schema=./app/database/schema.prisma
 
 # Start the server
 npm run start

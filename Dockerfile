@@ -27,7 +27,6 @@ COPY --from=deps /src/node_modules /src/node_modules
 ADD . .
 
 RUN npx prisma generate
-RUN npx prisma migrate deploy
 RUN npm run build
 RUN npm prune --omit=dev
 
