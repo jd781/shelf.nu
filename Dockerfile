@@ -27,6 +27,7 @@ COPY --from=deps /src/node_modules /src/node_modules
 ADD . .
 
 RUN npx prisma generate
+RUN npx prisma migrate deploy
 RUN npm run build
 RUN npm prune --omit=dev
 
@@ -37,6 +38,7 @@ COPY --from=build /src/node_modules /src/node_modules
 COPY --from=build /src/app/database /src/app/database
 COPY --from=build /src/build /src/build
 COPY --from=build /src/package.json /src/package.json
+COPY --from=build /src/prisma.config.ts /src/prisma.config.ts
 COPY --from=build /src/start.sh /src/start.sh
 
 RUN chmod +x /src/start.sh
