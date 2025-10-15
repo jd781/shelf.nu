@@ -17,10 +17,12 @@ const buildHash = process.env.BUILD_HASH || createHash();
 export default defineConfig({
   server: {
     port: 3000,
-    https: {
-      key: "./.cert/key.pem",
-      cert: "./.cert/cert.pem",
-    },
+    host: true, // Listen on all network interfaces (0.0.0.0)
+    // HTTPS disabled for HTTP-only deployment (mobile devices don't trust mkcert certificates)
+    // https: {
+    //   key: fs.readFileSync("./cert/desktop-2r1gsn5+3-key.pem"),
+    //   cert: fs.readFileSync("./cert/desktop-2r1gsn5+3.pem"),
+    // },
     warmup: {
       clientFiles: [
         "./app/entry.client.tsx",

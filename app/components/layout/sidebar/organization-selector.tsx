@@ -63,8 +63,19 @@ export default function OrganizationSelector() {
   useEffect(
     function setSwitchingWorkspaceAfterFetch() {
       setWorkspaceSwitching(isSwitchingOrg);
+
+      // When switching completes successfully, reload the page to refresh all data
+      if (
+        fetcher.state === "idle" &&
+        fetcher.data &&
+        typeof fetcher.data === "object" &&
+        "success" in fetcher.data &&
+        fetcher.data.success
+      ) {
+        window.location.reload();
+      }
     },
-    [isSwitchingOrg, setWorkspaceSwitching]
+    [isSwitchingOrg, setWorkspaceSwitching, fetcher.state, fetcher.data]
   );
 
   return (

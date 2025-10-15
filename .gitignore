@@ -46,6 +46,7 @@ desktop-app/portable
 .sentryclirc
 
 .cert
+/cert
 # VitePress
 docs/.vitepress/cache
 docs/.vitepress/dist

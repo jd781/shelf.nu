@@ -18,11 +18,25 @@ export async function action({ context, request }: ActionFunctionArgs) {
       })
     );
 
-    return redirect(safeRedirect(redirectTo), {
-      headers: [
-        setCookie(await setSelectedOrganizationIdCookie(organizationId)),
-      ],
-    });
+    // If redirectTo is provided, do a full redirect
+    // If not provided (e.g., from fetcher), return JSON to avoid navigation
+    if (redirectTo) {
+      return redirect(safeRedirect(redirectTo), {
+        headers: [
+          setCookie(await setSelectedOrganizationIdCookie(organizationId)),
+        ],
+      });
+    }
+
+    // For fetcher requests, return JSON with the cookie header
+    return json(
+      { success: true, organizationId },
+      {
+        headers: [
+          setCookie(await setSelectedOrganizationIdCookie(organizationId)),
+        ],
+      }
+    );
   } catch (cause) {
     const reason = makeShelfError(cause, { userId });
     return json(error(reason), { status: reason.status });

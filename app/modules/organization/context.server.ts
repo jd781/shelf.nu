@@ -18,7 +18,7 @@ const selectedOrganizationIdCookie = createCookie("selected-organization-id", {
   path: "/",
   sameSite: "lax",
   secrets: [SESSION_SECRET],
-  secure: NODE_ENV === "production",
+  secure: false, // Set to false to allow cookies on IP addresses with HTTPS
   maxAge: 60 * 60 * 24 * 365, // 1 year
 });
 

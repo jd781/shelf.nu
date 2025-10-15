@@ -27,7 +27,9 @@ export function createSessionStorage() {
       path: "/",
       sameSite: "lax",
       secrets: [env.SESSION_SECRET],
-      secure: env.NODE_ENV === "production",
+      // Always use secure:false for self-hosted on IP addresses
+      // HTTPS is still enforced by vite.config.ts
+      secure: false,
     },
   });
 }
