@@ -1,4 +1,5 @@
-#!/bin/sh -e
+#!/bin/sh
+set -e
 
 # This file is how Fly starts the server (configured in fly.toml). 
 # Run migrations before starting the server (secrets are available at runtime)
