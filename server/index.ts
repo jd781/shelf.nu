@@ -85,6 +85,17 @@ export const server = await createHonoServer({
   defaultLogger: false,
   getLoadContext,
   configure: (server) => {
+    // Add the JumpCloud Apple MDM route FIRST, before other middleware
+    server.get('/.well-known/com.apple.remotemanagement', (c) => {
+      // Get your Org ID from the JumpCloud console
+      const jumpCloudOrgId = '690bb97c1e1c9dafd3860dea';
+      
+      const redirectUrl = `https://apple.mdm.jumpcloud.com/account-driven-service-discovery?organization_id=${jumpCloudOrgId}`;
+      
+      // Send a 301 Permanent Redirect
+      return c.redirect(redirectUrl, 301);
+    });
+
     // Apply the middleware to all routes
     server.use(
       `/${process.env.URL_SHORTENER}/:path*`,
