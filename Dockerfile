@@ -7,9 +7,9 @@ ENV NODE_ENV="production"
 ARG DEBIAN_FRONTEND="noninteractive"
 WORKDIR /src
 
-# Install openssl for Prisma
+# Install openssl for Prisma AND dos2unix
 RUN apt-get update && \
-    apt-get install -y openssl && \
+    apt-get install -y openssl dos2unix && \
     rm -rf /var/lib/apt/lists/*
 
 
@@ -46,7 +46,11 @@ COPY --from=build /src/package.json /src/package.json
 COPY --from=build /src/prisma.config.ts /src/prisma.config.ts
 COPY --from=build /src/start.sh /src/start.sh
 
-# Ensure start.sh is executable
+# --- HERE ARE THE FIXES ---
+# 1. Force-convert Windows line endings (CRLF) to Linux (LF)
+RUN dos2unix /src/start.sh
+
+# 2. Ensure start.sh is executable
 RUN chmod +x /src/start.sh
 
 ENTRYPOINT [ "/src/start.sh" ]
