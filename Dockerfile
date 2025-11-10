@@ -44,7 +44,7 @@ COPY --from=build /src/app/database /src/app/database
 COPY --from=build /src/build /src/build
 COPY --from=build /src/package.json /src/package.json
 COPY --from=build /src/prisma.config.ts /src/prisma.config.ts
-COPY --from=build /src/start.sh /src/start.sh
+COPY start.sh /src/start.sh
 
 # --- HERE ARE THE FIXES ---
 # 1. Force-convert Windows line endings (CRLF) to Linux (LF)
