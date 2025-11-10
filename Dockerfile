@@ -13,10 +13,16 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 
-# Install all node_modules, including dev dependencies
+# Install all dependencies
 FROM base AS deps
 
-ADD package.json .
+# Copy package files
+COPY package*.json ./
+
+# Install patch-package first
+RUN npm install -g patch-package
+
+# Then install all dependencies
 RUN npm install --include=dev
 
 # Build the app and setup production node_modules
@@ -40,6 +46,7 @@ COPY --from=build /src/package.json /src/package.json
 COPY --from=build /src/prisma.config.ts /src/prisma.config.ts
 COPY --from=build /src/start.sh /src/start.sh
 
+# Ensure start.sh is executable
 RUN chmod +x /src/start.sh
 
 ENTRYPOINT [ "/src/start.sh" ]
