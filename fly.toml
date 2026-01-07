@@ -16,9 +16,10 @@ PORT = "8080"
 
 # Modern VM configuration format
 [[vm]]
-size = "shared-cpu-512mb"  # Changed from 256mb to 512mb
 cpu_kind = "shared"
 cpus = 1
+memory_mb = 1024
+size = "shared-cpu-1x"
 
 [[services]]
 internal_port = 8080
