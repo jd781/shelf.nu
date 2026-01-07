@@ -1126,9 +1126,17 @@ describe("reserveBooking", () => {
   it("should throw error when assets have booking conflicts", async () => {
     expect.assertions(1);
 
+    // Use future dates for booking
+    const futureStartDate = new Date();
+    futureStartDate.setDate(futureStartDate.getDate() + 7); // 7 days in future
+    const futureEndDate = new Date(futureStartDate);
+    futureEndDate.setDate(futureEndDate.getDate() + 3); // 3 days after start
+
     const mockBooking = {
       ...mockBookingData,
       status: BookingStatus.DRAFT,
+      from: futureStartDate,
+      to: futureEndDate,
       assets: [
         {
           id: "asset-1",
@@ -1148,7 +1156,21 @@ describe("reserveBooking", () => {
     //@ts-expect-error missing vitest type
     db.booking.findUniqueOrThrow.mockResolvedValue(mockBooking);
 
-    await expect(reserveBooking(mockReserveParams)).rejects.toThrow(
+    await expect(
+      reserveBooking({
+        id: "booking-1",
+        name: "Reserved Booking",
+        organizationId: "org-1",
+        custodianUserId: "user-1",
+        custodianTeamMemberId: "team-1",
+        from: futureStartDate,
+        to: futureEndDate,
+        description: "Reserved booking description",
+        hints: mockClientHints,
+        isSelfServiceOrBase: false,
+        tags: [],
+      })
+    ).rejects.toThrow(
       "Cannot reserve booking. Some assets are already booked or checked out: Asset 1. Please remove conflicted assets and try again."
     );
   });
